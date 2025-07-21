@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:bookify_book_rental/features/books/domain/entities/book_entity.dart';
 import 'package:bookify_book_rental/features/books/domain/entities/rental_entity.dart';
+import 'package:bookify_book_rental/features/books/domain/usecases/delete_book_use_case.dart';
+import 'package:bookify_book_rental/features/books/domain/usecases/update_book_use_case.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/get_all_books_use_case.dart';
@@ -12,6 +16,8 @@ part 'book_state.dart';
 class BookBloc extends Bloc<BookEvent, BookState> {
   final GetAllBooksUseCase getAllBooksUseCase;
   final SearchBooksUseCase searchBooksUseCase;
+  final DeleteBookUseCase deleteBookUseCase;
+  final UpdateBookUseCase updateBookUseCase;
   final RentBookUseCase rentBookUseCase;
   final BookRepository bookRepository;
 
@@ -20,6 +26,8 @@ class BookBloc extends Bloc<BookEvent, BookState> {
     required this.searchBooksUseCase,
     required this.rentBookUseCase,
     required this.bookRepository,
+    required this.deleteBookUseCase,
+    required this.updateBookUseCase,
   }) : super(const BookInitial()) {
     on<LoadBooksEvent>(_onLoadBooks);
     on<SearchBooksEvent>(_onSearchBooks);
@@ -39,10 +47,10 @@ class BookBloc extends Bloc<BookEvent, BookState> {
   ) async {
     emit(const BookLoading());
     final result = await getAllBooksUseCase();
-    result.fold(
-      (failure) => emit(BookError(failure.message)),
-      (books) => emit(BooksLoaded(books)),
-    );
+    result.fold((failure) {
+      log('failure loaded books');
+      emit(BookError(failure.message));
+    }, (books) => emit(BooksLoaded(books)));
   }
 
   Future<void> _onSearchBooks(
@@ -96,24 +104,34 @@ class BookBloc extends Bloc<BookEvent, BookState> {
   }
 
   Future<void> _onAddBook(AddBookEvent event, Emitter<BookState> emit) async {
-    emit(const BookLoading());
+    List<BookEntity> booksLoadedState = [];
+    if (state is BooksLoaded) {
+      booksLoadedState = (state as BooksLoaded).books;
+    }
+    emit(BookLoading());
     final result = await bookRepository.addBook(event.book);
-    result.fold(
-      (failure) => emit(BookError(failure.message)),
-      (book) => emit(BookAdded(book)),
-    );
+    result.fold((failure) => emit(BookError(failure.message)), (book) {
+      final updatedBooks = List<BookEntity>.from(booksLoadedState)..add(book);
+      emit(BooksLoaded(updatedBooks));
+    });
   }
 
   Future<void> _onUpdateBook(
     UpdateBookEvent event,
     Emitter<BookState> emit,
   ) async {
+    List<BookEntity> booksLoadedState = [];
+    if (state is BooksLoaded) {
+      booksLoadedState = (state as BooksLoaded).books;
+    }
     emit(const BookLoading());
-    final result = await bookRepository.updateBook(event.book);
-    result.fold(
-      (failure) => emit(BookError(failure.message)),
-      (book) => emit(BookUpdated(book)),
-    );
+    final result = await updateBookUseCase(UpdateBookParams(book: event.book));
+    result.fold((failure) => emit(BookError(failure.message)), (book) {
+      final updatedBooks = booksLoadedState.map((b) {
+        return b.id == book.id ? book : b;
+      }).toList();
+      emit(BooksLoaded(updatedBooks));
+    });
   }
 
   Future<void> _onDeleteBook(
@@ -121,7 +139,7 @@ class BookBloc extends Bloc<BookEvent, BookState> {
     Emitter<BookState> emit,
   ) async {
     emit(const BookLoading());
-    final result = await bookRepository.deleteBook(event.bookId);
+    final result = await deleteBookUseCase(event.bookId);
     result.fold(
       (failure) => emit(BookError(failure.message)),
       (_) => emit(const BookDeleted()),

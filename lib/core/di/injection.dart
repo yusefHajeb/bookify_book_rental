@@ -1,4 +1,13 @@
 import 'package:bookify_book_rental/features/auth/domain/repositories/auth_repository.dart';
+import 'package:bookify_book_rental/features/books/data/datasources/book_local_data_source.dart';
+import 'package:bookify_book_rental/features/books/data/repositories/book_repository_impl.dart';
+import 'package:bookify_book_rental/features/books/domain/repositories/book_repository.dart';
+import 'package:bookify_book_rental/features/books/domain/usecases/delete_book_use_case.dart';
+import 'package:bookify_book_rental/features/books/domain/usecases/get_all_books_use_case.dart';
+import 'package:bookify_book_rental/features/books/domain/usecases/rent_book_use_case.dart';
+import 'package:bookify_book_rental/features/books/domain/usecases/search_books_use_case.dart';
+import 'package:bookify_book_rental/features/books/domain/usecases/update_book_use_case.dart';
+import 'package:bookify_book_rental/features/books/presentation/bloc/book_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,6 +47,41 @@ Future<void> init() async {
       loginUseCase: sl(),
       registerUseCase: sl(),
       authRepository: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<BookLocalDataSource>(() => BookLocalDataSource());
+
+  sl.registerLazySingleton<BookRepository>(
+    () => BookRepositoryImpl(localDataSource: sl<BookLocalDataSource>()),
+  );
+
+  sl.registerLazySingleton<GetAllBooksUseCase>(
+    () => GetAllBooksUseCase(sl<BookRepository>()),
+  );
+
+  sl.registerLazySingleton<SearchBooksUseCase>(
+    () => SearchBooksUseCase(sl<BookRepository>()),
+  );
+
+  sl.registerLazySingleton<RentBookUseCase>(
+    () => RentBookUseCase(sl<BookRepository>()),
+  );
+
+  sl.registerLazySingleton<DeleteBookUseCase>(
+    () => DeleteBookUseCase(sl<BookRepository>()),
+  );
+  sl.registerLazySingleton<UpdateBookUseCase>(
+    () => UpdateBookUseCase(sl<BookRepository>()),
+  );
+  sl.registerFactory<BookBloc>(
+    () => BookBloc(
+      deleteBookUseCase: sl<DeleteBookUseCase>(),
+      updateBookUseCase: sl<UpdateBookUseCase>(),
+      getAllBooksUseCase: sl<GetAllBooksUseCase>(),
+      searchBooksUseCase: sl<SearchBooksUseCase>(),
+      rentBookUseCase: sl<RentBookUseCase>(),
+      bookRepository: sl<BookRepository>(),
     ),
   );
 }
