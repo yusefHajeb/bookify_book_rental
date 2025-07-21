@@ -48,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           }
 
           if (state is AuthAuthenticated) {
-            context.pushReplacementNamed(Routes.homePage);
+            context.push(Routes.homePage);
           }
         },
         child: SafeArea(

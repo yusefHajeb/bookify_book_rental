@@ -1,3 +1,4 @@
+import 'package:bookify_book_rental/features/books/data/datasources/book_local_data_source.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:crypto/crypto.dart';
@@ -27,6 +28,10 @@ class AuthLocalDataSource {
     final path = join(dbPath, 'bookify.db');
     return openDatabase(
       path,
+
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion > 1) {}
+      },
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE users (
@@ -38,6 +43,35 @@ class AuthLocalDataSource {
             createdAt TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
           )
         ''');
+        await db.execute('''
+          CREATE TABLE books (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            author TEXT NOT NULL,
+            description TEXT NOT NULL,
+            imageUrl TEXT NOT NULL,
+            rating REAL NOT NULL,
+            isAvailable INTEGER NOT NULL,
+            createdAt TEXT NOT NULL,
+            updatedAt TEXT NOT NULL
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE rentals (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            userId INTEGER NOT NULL,
+            bookId INTEGER NOT NULL,
+            rentalDate TEXT NOT NULL,
+            returnDate TEXT,
+            dueDate TEXT NOT NULL,
+            status TEXT NOT NULL,
+            createdAt TEXT NOT NULL,
+            updatedAt TEXT NOT NULL,
+            FOREIGN KEY (bookId) REFERENCES books (id)
+          )
+        ''');
+        await BookLocalDataSource.insertSampleBooks(db);
       },
       version: 1,
     );
