@@ -47,7 +47,10 @@ class _BookDialogState extends State<BookDialog> {
     final isEdit = widget.book != null;
 
     return AlertDialog(
-      title: Text(isEdit ? 'تعديل الكتاب' : 'إضافة كتاب'),
+      title: Text(
+        isEdit ? 'تعديل الكتاب' : 'إضافة كتاب',
+        style: Theme.of(context).textTheme.labelMedium,
+      ),
       content: SingleChildScrollView(
         child: Form(key: _formKey, child: _buildFormFields(context)),
       ),
@@ -210,7 +213,10 @@ class _BookDialogState extends State<BookDialog> {
             Navigator.pop(context);
           }
         },
-        child: Text(isEdit ? 'تحديث' : 'إضافة'),
+        child: Text(
+          isEdit ? 'تحديث' : 'إضافة',
+          style: Theme.of(context).textTheme.labelMedium,
+        ),
       ),
     ];
   }

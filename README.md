@@ -66,14 +66,26 @@ lib/
 |---------------------|---------------------------------------|
 | Framework           | Flutter 3.x (Null Safety)             |
 | State Management    | BLoC Pattern                          |
-| Routing            | GoRouter                              |
+| Routing             | GoRouter                              |
 | Local Database      | SQLite                                |
 | Dependency Injection| get_it                                |
-| Testing            | flutter_test + mockito                |
-| UI Components       | Custom Material Design System        |
+| Testing             | flutter_test + mockito                |
+| UI Components       | Custom Material Design System         |
 
 ## Installation
 
 1. Clone the repository:
    
+
+## Screenshots
+
+### Login Screen
+
+#### Login
+![Login Screen]<img src="assets/imgs/login_light.jpg" width="200">	<img src="assets/imgs/login_dark.jpg" width="200">
+
+
+### Register Screen
+
+![Register Screen]<img src="assets/imgs/register_screen_light.jpg" width="200"> <img src="assets/imgs/register_screen_dark.jpg" width="200">
 

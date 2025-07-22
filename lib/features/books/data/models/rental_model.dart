@@ -36,7 +36,6 @@ class RentalModel extends RentalEntity {
       'bookId': bookId,
       'rentalDate': rentalDate.toIso8601String(),
       'returnDate': returnDate?.toIso8601String(),
-      'dueDate': dueDate.toIso8601String(),
       'status': status.name,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
