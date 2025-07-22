@@ -34,9 +34,9 @@ class AppTheme {
   );
 
   static const ColorScheme darkColorScheme = ColorScheme(
-    primary: Color(0xFF4F46E5),
+    primary: Color.fromARGB(255, 59, 113, 250),
     onPrimary: Colors.white,
-    secondary: Color(0xFF241E30),
+    secondary: Color.fromARGB(255, 195, 121, 18),
     onSecondary: Color(0xFFE6EBEB),
     error: Colors.redAccent,
     inversePrimary: Color.fromARGB(255, 244, 247, 252),
@@ -166,7 +166,7 @@ class AppTheme {
       ),
       headlineMedium: AppTextStyles.mediumHeadline.copyWith(
         color: colorScheme.onPrimary,
-        fontSize: 20.0.sp,
+        fontSize: 17.0.sp,
         fontWeight: FontWeight.w400,
       ),
       headlineSmall: AppTextStyles.smallHeadline.copyWith(
@@ -203,16 +203,16 @@ class AppTheme {
       style: ElevatedButton.styleFrom(
         elevation: 2.0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0.r),
+          borderRadius: BorderRadius.circular(12.0.r),
         ),
-        minimumSize: Size(double.infinity, 38.0.h),
+
         shadowColor: colorScheme.shadow,
         backgroundColor: colorScheme.primary,
         disabledBackgroundColor: colorScheme.primary.withOpacity(0.4),
         disabledForegroundColor: Colors.grey,
-        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 16.0.h),
-        textStyle: AppTextStyles.bodyText.copyWith(
-          color: colorScheme.onPrimaryContainer,
+        padding: EdgeInsets.symmetric(vertical: 16.0.h),
+        textStyle: AppTextStyles.labelMediumText.copyWith(
+          color: colorScheme.onPrimary,
         ),
       ),
     ),

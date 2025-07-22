@@ -15,7 +15,7 @@ class AppTextStyles {
 
   /// The style for the large body text.
   static TextStyle get largeBodyText =>
-      _baseStyle.copyWith(fontSize: 24.sp, fontWeight: FontWeight.w700);
+      _baseStyle.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w700);
 
   /// The style for the small body text.
   static TextStyle get smallBodyText =>
@@ -27,15 +27,15 @@ class AppTextStyles {
 
   /// The style for the headline 1.
   static TextStyle get headline1 =>
-      _baseStyle.copyWith(fontSize: 20.sp, fontWeight: FontWeight.w300);
+      _baseStyle.copyWith(fontSize: 16.sp, fontWeight: FontWeight.w300);
 
   /// The style for the headline 2.
   static TextStyle get headline2 =>
-      _baseStyle.copyWith(fontSize: 20.sp, fontWeight: FontWeight.w400);
+      _baseStyle.copyWith(fontSize: 17.sp, fontWeight: FontWeight.w400);
 
   /// The style for the headline 3.
   static TextStyle get headline3 =>
-      _baseStyle.copyWith(fontSize: 20.sp, fontWeight: FontWeight.w300);
+      _baseStyle.copyWith(fontSize: 17.sp, fontWeight: FontWeight.w300);
 
   /// The style for the small headline.
   static TextStyle get smallHeadline =>
@@ -47,18 +47,18 @@ class AppTextStyles {
 
   /// The style for the medium headline.
   static TextStyle get mediumHeadline =>
-      _baseStyle.copyWith(fontSize: 16.sp, fontWeight: FontWeight.w500);
+      _baseStyle.copyWith(fontSize: 15.sp, fontWeight: FontWeight.w500);
 
   /// The style for the headline 6.
   static TextStyle get headline6 =>
-      _baseStyle.copyWith(fontSize: 16.sp, fontWeight: FontWeight.w500);
+      _baseStyle.copyWith(fontSize: 15.sp, fontWeight: FontWeight.w500);
 
   /// The style for the button text.
   static TextStyle get buttonText =>
       _baseStyle.copyWith(fontSize: 16.sp, fontWeight: FontWeight.w600);
 
   static TextStyle bodyLargeText = TextStyle(
-    fontSize: 18.sp,
+    fontSize: 16.sp,
     fontWeight: FontWeight.bold,
     height: 1.5,
   );

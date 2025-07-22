@@ -1,6 +1,6 @@
-import 'dart:io';
-
 import 'package:bookify_book_rental/core/routes/routes.dart';
+import 'package:bookify_book_rental/core/utils/animated_fade_in.dart';
+import 'package:bookify_book_rental/core/utils/animated_fade_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,11 +35,19 @@ class BookDetailsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BookImage(book: book, context: context),
+          AnimatedFadeScale(
+            child: BookImage(book: book, context: context),
+          ),
           SizedBox(height: 16.h),
-          BookInfo(book: book, context: context),
+          AnimatedFadeIn(
+            delay: const Duration(milliseconds: 300),
+            child: BookInfo(book: book, context: context),
+          ),
           SizedBox(height: 24.h),
-          RentButton(book: book, context: context),
+          AnimatedFadeIn(
+            delay: const Duration(milliseconds: 600),
+            child: RentButton(book: book, context: context),
+          ),
         ],
       ),
     );
@@ -47,13 +55,15 @@ class BookDetailsScreen extends StatelessWidget {
 
   Widget _buildTabletLayout(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(24.w),
+      padding: EdgeInsets.all(16.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             flex: 2,
-            child: BookImage(book: book, context: context),
+            child: AnimatedFadeScale(
+              child: BookImage(book: book, context: context),
+            ),
           ),
           SizedBox(width: 24.w),
           Expanded(
@@ -61,9 +71,15 @@ class BookDetailsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BookInfo(book: book, context: context),
+                AnimatedFadeIn(
+                  delay: const Duration(milliseconds: 300),
+                  child: BookInfo(book: book, context: context),
+                ),
                 SizedBox(height: 24.h),
-                RentButton(book: book, context: context),
+                AnimatedFadeIn(
+                  delay: const Duration(milliseconds: 600),
+                  child: RentButton(book: book, context: context),
+                ),
               ],
             ),
           ),
@@ -108,15 +124,10 @@ class RentButton extends StatelessWidget {
                   context.go(Routes.bookingFlowPage, extra: book);
                 }
               : null,
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 16.h),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-          ),
+
           child: Text(
             book.isAvailable ? 'حجز الكتاب' : 'غير متوفر',
-            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.labelMedium,
           ),
         ),
       ),
@@ -135,49 +146,52 @@ class BookInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          book.title,
-          style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
-        ),
+        AnimatedFadeScale(child: Text(book.title)),
         SizedBox(height: 8.h),
-        Text(
-          'by ${book.author}',
-          style: TextStyle(fontSize: 18.sp, color: Colors.grey[600]),
+        AnimatedFadeScale(
+          duration: const Duration(milliseconds: 600),
+          child: Text(
+            'للكاتب ${book.author}',
+            style: TextStyle(fontSize: 18.sp, color: Colors.grey[600]),
+          ),
         ),
         SizedBox(height: 16.h),
-        Row(
-          children: [
-            Icon(Icons.star, size: 20.sp, color: Colors.amber),
-            SizedBox(width: 4.w),
-            Text(
-              book.rating.toStringAsFixed(1),
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(width: 16.w),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-              decoration: BoxDecoration(
-                color: book.isAvailable ? Colors.green : Colors.red,
-                borderRadius: BorderRadius.circular(6.r),
-              ),
-              child: Text(
-                book.isAvailable ? 'متوفر' : 'غير متوفر',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
+        AnimatedFadeIn(
+          delay: const Duration(milliseconds: 800),
+          child: Row(
+            children: [
+              Icon(Icons.star, size: 20.sp, color: Colors.amber),
+              SizedBox(width: 4.w),
+              Text(book.rating.toStringAsFixed(1)),
+              SizedBox(width: 16.w),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: book.isAvailable ? Colors.green : Colors.red,
+                  borderRadius: BorderRadius.circular(6.r),
+                ),
+                child: Text(
+                  book.isAvailable ? 'متوفر' : 'غير متوفر',
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         SizedBox(height: 16.h),
         Text(
-          'Description',
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+          'الوصف',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         SizedBox(height: 8.h),
-        Text(book.description, style: TextStyle(fontSize: 14.sp, height: 1.5)),
+        Text(book.description),
       ],
     );
   }
@@ -200,8 +214,8 @@ class BookImage extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.r),
-        child: Image.file(
-          File(book.imageUrl),
+        child: Image.network(
+          book.imageUrl,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Container(
