@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:bookify_book_rental/core/routes/routes.dart';
+import 'package:bookify_book_rental/core/theme/theme_card.dart';
+import 'package:bookify_book_rental/core/utils/animated_fade_in.dart';
+import 'package:bookify_book_rental/core/utils/animated_fade_scale.dart';
 import 'package:bookify_book_rental/core/widgets/app_test_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,24 +66,31 @@ class _HomeScreenState extends State<HomeScreen> {
               context.read<AuthBloc>().add(const AuthLogoutRequested());
             },
           ),
+
+          ThemeCard(),
         ],
       ),
       body: Column(
         children: [
           Padding(
             padding: EdgeInsets.all(16.w),
-            child: AppTextFormField(
-              controller: _searchController,
-              onChanged: _onSearchChanged,
-              hintText: 'ابحث ب اسم الكتاب أو الكاتب...',
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 16.w,
-                vertical: 8.h,
+            child: AnimatedFadeScale(
+              child: AppTextFormField(
+                controller: _searchController,
+                onChanged: _onSearchChanged,
+                hintText: 'ابحث ب اسم الكتاب أو الكاتب...',
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.w,
+                  vertical: 8.h,
+                ),
+                prefixIcon: AnimatedFadeScale(
+                  duration: const Duration(milliseconds: 560),
+                  child: const Icon(Icons.search),
+                ),
+                validator: (value) {
+                  return null;
+                },
               ),
-              prefixIcon: const Icon(Icons.search),
-              validator: (value) {
-                return null;
-              },
             ),
           ),
           Expanded(
@@ -98,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Error: ${state.message}'),
+                        Text(': ${state.message}'),
                         ElevatedButton(
                           onPressed: () {
                             context.read<BookBloc>().add(
@@ -148,11 +158,14 @@ class _BookGrid extends StatelessWidget {
           ),
           itemCount: books.length,
           itemBuilder: (context, index) {
-            return BookCard(
-              book: books[index],
-              onTap: () {
-                context.push(Routes.bookDetailsPage, extra: books[index]);
-              },
+            return AnimatedFadeIn(
+              delay: Duration(milliseconds: index * 100),
+              child: BookCard(
+                book: books[index],
+                onTap: () {
+                  context.push(Routes.bookDetailsPage, extra: books[index]);
+                },
+              ),
             );
           },
         );

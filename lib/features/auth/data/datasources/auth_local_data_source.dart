@@ -29,9 +29,6 @@ class AuthLocalDataSource {
     return openDatabase(
       path,
 
-      onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion > 1) {}
-      },
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE users (

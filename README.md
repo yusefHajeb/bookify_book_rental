@@ -1,16 +1,79 @@
-# bookify_book_rental
+# Bookify - Book Rental Application
 
-A new Flutter project.
+![Bookify Logo](app_logo.png)
 
-## Getting Started
+A Flutter-based book rental application with user and admin roles, implementing clean architecture and BLoC state management.
 
-This project is a starting point for a Flutter application.
+## Table of Contents
 
-A few resources to get you started if this is your first Flutter project:
+- [Features](#features)
+- [Architecture](#architecture)
+- [Technical Stack](#technical-stack)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running Tests](#running-tests)
+- [Screenshots](#screenshots)
+- [Contributing](#contributing)
+- [License](#license)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Authentication System
+
+- Clean architecture separation (domain, data, presentation)
+- Complete user registration and login flows
+- Role-based access control (admin/user)
+- Form validation with error handling
+- BLoC state management
+- SQLite local storage for user data
+
+### Admin Panel
+
+- Modern, responsive UI with Material Design
+- Full CRUD operations for book management
+- Rental status management (view/update)
+- Real-time updates using BookBloc events
+- Exclusive role-based access
+
+### User Features
+
+- Book listing with search functionality
+- Detailed book view
+- Complete rental process flow
+- User profile with rental history
+- Account management
+
+## Architecture
+
+lib/
+- core/ # Shared utilities and constants
+- features/ # Feature modules
+  - auth/ # Authentication
+  - books/ # Book management
+  - profile/ # User profile
+  - admin/ # Admin features
+- app/ # App configuration
+
+**Clean Architecture Layers:**
+
+1. **Presentation**: UI + BLoCs
+2. **Domain**: Entities + Use Cases
+3. **Data**: Repositories + Data Sources
+
+## Technical Stack
+
+| Category            | Technologies                          |
+|---------------------|---------------------------------------|
+| Framework           | Flutter 3.x (Null Safety)             |
+| State Management    | BLoC Pattern                          |
+| Routing            | GoRouter                              |
+| Local Database      | SQLite                                |
+| Dependency Injection| get_it                                |
+| Testing            | flutter_test + mockito                |
+| UI Components       | Custom Material Design System        |
+
+## Installation
+
+1. Clone the repository:
+   
+

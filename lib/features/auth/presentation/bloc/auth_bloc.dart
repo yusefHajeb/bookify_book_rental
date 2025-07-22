@@ -97,7 +97,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           name: nameController.text,
           email: emailController.text,
           password: passwordController.text,
-          role: 'user',
+          role: event.role,
         );
         log(user.toString());
         emit(AuthAuthenticated(user: user));

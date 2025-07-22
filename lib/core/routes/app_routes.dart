@@ -4,12 +4,13 @@ import 'dart:developer';
 import 'package:bookify_book_rental/core/di/injection.dart';
 import 'package:bookify_book_rental/core/routes/routes.dart';
 import 'package:bookify_book_rental/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:bookify_book_rental/features/auth/presentation/screens/admin_panel_screen.dart';
+import 'package:bookify_book_rental/features/books/presentation/screens/admin_panel_screen.dart';
 import 'package:bookify_book_rental/features/auth/presentation/screens/login_screen.dart';
 import 'package:bookify_book_rental/features/auth/presentation/screens/register_screen.dart';
 import 'package:bookify_book_rental/features/books/data/models/book_model.dart';
 import 'package:bookify_book_rental/features/books/presentation/screens/book_details_screen.dart';
 import 'package:bookify_book_rental/features/books/presentation/screens/booking_flow_screen.dart';
+import 'package:bookify_book_rental/features/books/presentation/screens/home_screen.dart';
 import 'package:bookify_book_rental/features/books/presentation/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +33,7 @@ class AppRoutes {
         path: Routes.homePage,
         builder: (context, state) => BlocProvider(
           create: (context) => sl<BookBloc>()..add(const LoadBooksEvent()),
+          child: HomeScreen(),
         ),
       ),
       GoRoute(

@@ -1,14 +1,15 @@
+import 'package:bookify_book_rental/core/theme/theme_card.dart';
 import 'package:bookify_book_rental/core/utils/animated_fade_in.dart';
 import 'package:bookify_book_rental/core/utils/animated_fade_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
-import '../../../books/presentation/bloc/book_bloc.dart';
-import '../../../books/domain/entities/book_entity.dart';
-import '../../../books/domain/entities/rental_entity.dart';
-import '../../../books/presentation/widgets/book_card.dart';
-import '../../../books/presentation/widgets/rental_card.dart';
+import '../bloc/book_bloc.dart';
+import '../../domain/entities/book_entity.dart';
+import '../../domain/entities/rental_entity.dart';
+import '../widgets/book_card.dart';
+import '../widgets/rental_card.dart';
 import '../widgets/book_dialog.dart';
 import '../widgets/rental_status_dialog.dart';
 
@@ -17,7 +18,6 @@ class AdminPanelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize data loading
     context.read<BookBloc>()..add(const LoadBooksEvent());
 
     return DefaultTabController(
@@ -36,9 +36,14 @@ class AdminPanelScreen extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Admin Panel'),
+            title: Text(
+              'لوحة التحكم',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
             elevation: 2,
             actions: [
+              ThemeCard(),
+
               IconButton(
                 icon: const Icon(Icons.logout),
                 onPressed: () {
@@ -51,13 +56,13 @@ class AdminPanelScreen extends StatelessWidget {
               tabs: [
                 Tab(
                   icon: AnimatedFadeScale(child: const Icon(Icons.book)),
-                  text: 'Books',
+                  text: 'إدارة الكتب',
                 ),
                 Tab(
                   icon: AnimatedFadeScale(
                     child: const Icon(Icons.receipt_long),
                   ),
-                  text: 'Rentals',
+                  text: 'الإجارات',
                 ),
               ],
             ),
@@ -73,7 +78,7 @@ class AdminPanelScreen extends StatelessWidget {
                       ? FloatingActionButton.extended(
                           onPressed: () => _showAddBookDialog(context),
                           icon: const Icon(Icons.add),
-                          label: const Text('Add Book'),
+                          label: const Text('إضافة كتاب'),
                         )
                       : const SizedBox.shrink();
                 },

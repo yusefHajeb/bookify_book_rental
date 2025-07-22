@@ -59,21 +59,24 @@ class BookLocalDataSource {
   static Future<void> insertSampleBooks(Database db) async {
     final sampleBooks = [
       {
-        'title': 'عظيم غاتسبي',
-        'author': 'فرانسيس سكوت فيتزجيرالد',
-        'description': 'رواية كلاسيكية الأمريكية في Jazz Age.',
-        'imageUrl': 'https://via.placeholder.com/150x200',
+        'title': 'REMINDER OF HIM COLLEEN HOOVER',
+        'author': 'ديفيد لودج',
+        'description':
+            'دليل شامل لفن كتابة القصص الخيالية، يغطي جوانب مثل تطوير الشخصية، وبناء الحبكة، وتقنيات السرد.',
+        'imageUrl':
+            'https://m.media-amazon.com/images/I/418HLIXlxCL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg',
         'rating': 4.2,
         'isAvailable': 1,
         'createdAt': DateTime.now().toIso8601String(),
         'updatedAt': DateTime.now().toIso8601String(),
       },
       {
-        'title': 'لقتل الطائر المحاكي',
-        'author': 'هاربر لينكولن',
+        'title': 'الشركات الناشئة الهزيلة',
+        'author': 'يوسف حاجب',
         'description':
-            'رواية تتناول قضايا العنصرية والعدالة في الجنوب الأمريكي.',
-        'imageUrl': 'https://via.placeholder.com/150x200',
+            'نهج مبتكر لبناء وتنمية الشركات الناشئة، مع التركيز على التجريب السريع، والتعلم المعتمد، وتطوير المنتجات التكرارية.',
+        'imageUrl':
+            'https://m.media-amazon.com/images/I/51mFoFmu0EL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg',
         'rating': 4.5,
         'isAvailable': 1,
         'createdAt': DateTime.now().toIso8601String(),
@@ -81,9 +84,10 @@ class BookLocalDataSource {
       },
       {
         'title': '1984',
-        'author': '',
-        'description': '.',
-        'imageUrl': '',
+        'author': 'الاستاذ خالد فرحان',
+        'description': 'الكتاب فقط للعرض',
+        'imageUrl':
+            'https://m.media-amazon.com/images/I/41pTqRlersL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg',
         'rating': 4.4,
         'isAvailable': 1,
         'createdAt': DateTime.now().toIso8601String(),

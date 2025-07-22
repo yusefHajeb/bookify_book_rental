@@ -1,3 +1,6 @@
+import 'package:bookify_book_rental/core/theme/theme_card.dart';
+import 'package:bookify_book_rental/core/utils/animated_fade_in.dart';
+import 'package:bookify_book_rental/core/utils/animated_fade_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,17 +52,22 @@ class _UserProfileScreenState extends State<UserProfileScreen>
               context.read<AuthBloc>().add(const AuthLogoutRequested());
             },
           ),
+
+          ThemeCard(),
         ],
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {
           if (authState is AuthAuthenticated) {
-            return Column(
-              children: [
-                _buildUserInfo(authState.user),
-                _buildTabBar(),
-                Expanded(child: _buildTabBarView()),
-              ],
+            return AnimatedFadeIn(
+              delay: Duration(milliseconds: 350),
+              child: Column(
+                children: [
+                  AnimatedFadeScale(child: _buildUserInfo(authState.user)),
+                  _buildTabBar(),
+                  Expanded(child: _buildTabBarView()),
+                ],
+              ),
             );
           }
           return const Center(child: Text('Not authenticated'));
@@ -73,20 +81,31 @@ class _UserProfileScreenState extends State<UserProfileScreen>
       width: double.infinity,
       padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor.withOpacity(0.1),
+        color: Theme.of(context).primaryColor.withOpacity(0.08),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(20.r)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8.r,
+            offset: Offset(0, 2.h),
+          ),
+        ],
       ),
       child: Column(
         children: [
-          CircleAvatar(
-            radius: 40.r,
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Text(
-              user.name?.isNotEmpty == true ? user.name![0].toUpperCase() : 'U',
-              style: TextStyle(
-                fontSize: 32.sp,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+          AnimatedFadeScale(
+            child: CircleAvatar(
+              radius: 40.r,
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Text(
+                user.name?.isNotEmpty == true
+                    ? user.name![0].toUpperCase()
+                    : 'U',
+                style: TextStyle(
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
@@ -109,7 +128,11 @@ class _UserProfileScreenState extends State<UserProfileScreen>
             ),
             child: Text(
               user.role?.toUpperCase() ?? 'USER',
-              style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -121,8 +144,14 @@ class _UserProfileScreenState extends State<UserProfileScreen>
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
-        // color: Colors.grey[200],
         borderRadius: BorderRadius.circular(25.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6.r,
+            offset: Offset(0, 2.h),
+          ),
+        ],
       ),
       child: TabBar(
         controller: _tabController,
@@ -144,8 +173,6 @@ class _UserProfileScreenState extends State<UserProfileScreen>
           borderRadius: BorderRadius.circular(25.r),
           color: Theme.of(context).colorScheme.primary,
         ),
-
-        // labelColor: Colors.white,
         unselectedLabelColor: Colors.grey[600],
         tabs: const [
           Tab(text: 'حجوزات نشطة'),
@@ -182,29 +209,40 @@ class _UserProfileScreenState extends State<UserProfileScreen>
           }).toList();
 
           if (filteredRentals.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    showActive ? Icons.book_outlined : Icons.history,
-                    size: 64.sp,
-                    color: Colors.grey[400],
-                  ),
-                  SizedBox(height: 16.h),
-                  Text(
-                    showActive ? 'لا يوجد حجز نشط' : 'لا حجوزات مسبقة',
-                    style: TextStyle(fontSize: 18.sp, color: Colors.grey[600]),
-                  ),
-                  SizedBox(height: 8.h),
-                  Text(
-                    showActive
-                        ? ' تصفح الكتب وابداء الحجز'
-                        : 'حجزك المكتمل يظهر هنا.',
-                    style: TextStyle(fontSize: 14.sp, color: Colors.grey[500]),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+            return AnimatedFadeIn(
+              delay: Duration(milliseconds: 400),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedFadeScale(
+                      child: Icon(
+                        showActive ? Icons.book_outlined : Icons.history,
+                        size: 64.sp,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    Text(
+                      showActive ? 'لا يوجد حجز نشط' : 'لا حجوزات مسبقة',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      showActive
+                          ? ' تصفح الكتب وابداء الحجز'
+                          : 'حجزك المكتمل يظهر هنا.',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: Colors.grey[500],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             );
           }
@@ -217,27 +255,32 @@ class _UserProfileScreenState extends State<UserProfileScreen>
               padding: EdgeInsets.all(16.w),
               itemCount: filteredRentals.length,
               itemBuilder: (context, index) {
-                return RentalCard(
-                  rental: filteredRentals[index],
-                  onTap: () {
-                    _showRentalDetails(filteredRentals[index]);
-                  },
+                return AnimatedFadeScale(
+                  child: RentalCard(
+                    rental: filteredRentals[index],
+                    onTap: () {
+                      _showRentalDetails(filteredRentals[index]);
+                    },
+                  ),
                 );
               },
             ),
           );
         } else if (state is BookError) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Error: ${state.message}'),
-                SizedBox(height: 16.h),
-                ElevatedButton(
-                  onPressed: _loadUserRentals,
-                  child: const Text('اعادة المحاولة'),
-                ),
-              ],
+          return AnimatedFadeIn(
+            delay: Duration(milliseconds: 500),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Error: ${state.message}'),
+                  SizedBox(height: 16.h),
+                  ElevatedButton(
+                    onPressed: _loadUserRentals,
+                    child: const Text('اعادة المحاولة'),
+                  ),
+                ],
+              ),
             ),
           );
         }
@@ -259,72 +302,72 @@ class _UserProfileScreenState extends State<UserProfileScreen>
         minChildSize: 0.3,
         expand: false,
         builder: (context, scrollController) {
-          return Container(
-            padding: EdgeInsets.all(20.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 40.w,
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2.r),
+          return AnimatedFadeIn(
+            delay: Duration(milliseconds: 550),
+            child: Container(
+              padding: EdgeInsets.all(20.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 20.h),
-                Text(
-                  'Rental Details',
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
+                  SizedBox(height: 20.h),
+                  Text(
+                    'تفاصيل الحجز',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 20.h),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildDetailRow('Rental ID', '#${rental.id}'),
-                        _buildDetailRow('Book ID', '#${rental.bookId}'),
-                        _buildDetailRow(
-                          'Rental Date',
-                          _formatDate(rental.rentalDate),
-                        ),
-                        _buildDetailRow(
-                          'Due Date',
-                          _formatDate(rental.dueDate),
-                        ),
-                        if (rental.returnDate != null)
+                  SizedBox(height: 20.h),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildDetailRow('رقم الحجز', '#${rental.id}'),
+                          _buildDetailRow('رقم الكتاب', '#${rental.bookId}'),
                           _buildDetailRow(
-                            'Return Date',
-                            _formatDate(rental.returnDate!),
+                            'تاريخ الحجز',
+                            _formatDate(rental.rentalDate),
                           ),
-                        _buildDetailRow(
-                          'Status',
-                          _getStatusText(rental.status),
-                        ),
-                        SizedBox(height: 20.h),
-                        if (rental.status == RentalStatus.approved)
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                _showReturnConfirmation(rental);
-                              },
-                              child: const Text('Mark as Returned'),
+                          _buildDetailRow(
+                            'تاريخ الاستحقاق',
+                            _formatDate(rental.dueDate),
+                          ),
+                          if (rental.returnDate != null)
+                            _buildDetailRow(
+                              'تاريخ الإرجاع',
+                              _formatDate(rental.returnDate!),
                             ),
-                          ),
-                      ],
+                          _buildDetailRow('', _getStatusText(rental.status)),
+                          SizedBox(height: 20.h),
+                          if (rental.status == RentalStatus.approved)
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  _showReturnConfirmation(rental);
+                                },
+                                child: const Text('Mark as Returned'),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
@@ -363,30 +406,30 @@ class _UserProfileScreenState extends State<UserProfileScreen>
   void _showReturnConfirmation(RentalEntity rental) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Return Book'),
-        content: const Text(
-          'Are you sure you want to mark this book as returned?',
+      builder: (context) => AnimatedFadeScale(
+        child: AlertDialog(
+          title: const Text('إرجاع الكتاب'),
+          content: const Text('هل انت متاكد من ارجاع الكتاب?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('إلغاء'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                context.read<BookBloc>().add(
+                  UpdateRentalStatusEvent(
+                    rentalId: rental.id!,
+                    status: RentalStatus.returned,
+                    returnDate: DateTime.now(),
+                  ),
+                );
+              },
+              child: const Text('تأكيد'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              context.read<BookBloc>().add(
-                UpdateRentalStatusEvent(
-                  rentalId: rental.id!,
-                  status: RentalStatus.returned,
-                  returnDate: DateTime.now(),
-                ),
-              );
-            },
-            child: const Text('Confirm'),
-          ),
-        ],
       ),
     );
   }

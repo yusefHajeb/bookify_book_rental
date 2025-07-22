@@ -1,3 +1,4 @@
+import 'package:bookify_book_rental/core/theme/cubit/theme_cubit.dart';
 import 'package:bookify_book_rental/features/auth/domain/repositories/auth_repository.dart';
 import 'package:bookify_book_rental/features/books/data/datasources/book_local_data_source.dart';
 import 'package:bookify_book_rental/features/books/data/repositories/book_repository_impl.dart';
@@ -84,4 +85,6 @@ Future<void> init() async {
       bookRepository: sl<BookRepository>(),
     ),
   );
+
+  sl.registerFactory<ThemeCubit>(() => ThemeCubit(sl<SharedPreferences>()));
 }
